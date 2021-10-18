@@ -1,11 +1,62 @@
-import React from 'react';
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { RouteComponentProps } from 'react-router';
+import { ApplicationState } from '../store';
+import * as MeetingStore from '../store/Meeting';
+import { Card, CardContent, CardMedia, Grid, ListItemAvatar, Theme, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import Whatshot from '@material-ui/icons/Whatshot';
-import { makeStyles } from '@material-ui/core/styles';
-import { ListItemAvatar, Theme, Typography } from '@material-ui/core';
+import { IMeetingParticipant } from '../interfaces/IMeetingParticipant';
+import { secondsToHms } from '../utils/utils';
+
+
+type MeetingProps =
+    MeetingStore.MeetingState &
+    typeof MeetingStore.actionCreators &
+    RouteComponentProps<{}>;
+
+const RankingView = (props: any) => {
+    const meetingAttendants = props.props.meetingAttendants;
+    return <div>
+        <Grid container spacing={2}>
+            <Grid item md={12}>
+                <RankingHeader />
+            </Grid>
+        </Grid>
+        <Grid container spacing={2}>
+            <Grid item xs={12} md={4}>
+                <ScoreCard participant={meetingAttendants[0]} score={1} />
+            </Grid>
+            <Grid item xs={12} md={4}>
+                <ScoreCard participant={meetingAttendants[1]} score={2} />
+            </Grid>
+            <Grid item xs={12} md={4}>
+                <ScoreCard participant={meetingAttendants[2]} score={3} />
+            </Grid>
+        </Grid>
+        <Grid container spacing={2}>
+            <Grid item md={12}>
+                <Typography variant="h6" component="div" gutterBottom>
+                    {new Date().getMonth() + 1}/{new Date().getDate()}/{new Date().getFullYear()} top outstanding meeting attendants
+                </Typography>
+            </Grid>
+            <Grid item md={12}>
+                <RankingList meetingAttendants={meetingAttendants} />
+            </Grid>
+        </Grid>
+    </div>;
+}
+class Meeting extends React.PureComponent<MeetingProps> {
+    public render() {
+        return (
+            <RankingView props={this.props} />
+        );
+    }
+};
 
 const useStyles = makeStyles((theme: Theme) => (
     {
@@ -20,89 +71,38 @@ const useStyles = makeStyles((theme: Theme) => (
     }));
 
 
-const secondsToHms = (d: number) => {
-    var h = Math.floor(d / 3600);
-    var m = Math.floor(d % 3600 / 60);
-    var s = Math.floor(d % 3600 % 60);
-
-    var hDisplay = h > 0 ? h + (h === 1 ? " hour " : " hours ") : "";
-    var mDisplay = m > 0 ? m + (m === 1 ? " minute " : " minutes ") : "";
-    var sDisplay = s > 0 ? s + (s === 1 ? " second" : " seconds") : "";
-    return "Standing : " + hDisplay + mDisplay + sDisplay;
-}
-
-let attendantList = [
-    {
-        name: "Kathleen Antonelli",
-        duration: 19000
-    },
-    {
-        name: "John Bardeen",
-        duration: 18000
-    },
-    {
-        name: "Anita Borg",
-        duration: 19000
-    },
-    {
-        name: "Annie Jump Cannon",
-        duration: 20000
-    },
-    {
-        name: "Steve Wozniak",
-        duration: 21000
-    },
-    {
-        name: "Rosalyn Sussman Yalow"
-        ,
-        duration: 22000
-    },
-    {
-        name: "Nikolay Yegorovich Zhukovsky"
-        ,
-        duration: 23000
-    }];
-
-attendantList.sort((a, b) => {
-    if (a.duration === b.duration) {
-        return a.name.localeCompare(b.name);
-    }
-    else {
-        return b.duration - a.duration;
-    }
-});
-
-const RankingList = () => {
+const RankingList = (meetingAttendants: any) => {
     const classes = useStyles();
+    meetingAttendants = meetingAttendants.meetingAttendants;
     return <List className={classes.root}>
-        {attendantList.slice(0, 1).map((att, idx) => (
-            <ListItem>
+        {meetingAttendants.slice(0, 1).map((att: any) => (
+            <ListItem key={att.id}>
                 <ListItemAvatar>
                     <Avatar className={classes.avatar}>
                         <Whatshot />
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={att.name} secondary={secondsToHms(att.duration)} />
+                <ListItemText primary={att.Name} secondary={secondsToHms(att.Duration)} />
             </ListItem>
         ))}
-        {attendantList.slice(1, 5).map((att, idx) => (
-            <ListItem>
+        {meetingAttendants.slice(1, 5).map((att: any, idx: number) => (
+            <ListItem key={att.id}>
                 <ListItemAvatar>
                     <Avatar className={classes.avatar}>
                         {idx + 2}
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={att.name} secondary={secondsToHms(att.duration)} />
+                <ListItemText primary={att.Name} secondary={secondsToHms(att.Duration)} />
             </ListItem>
         ))}
-        {attendantList.slice(5).map((att, idx) => (
-            <ListItem>
+        {meetingAttendants.slice(5).map((att: any) => (
+            <ListItem key={att.id}>
                 <ListItemAvatar>
                     <Avatar>
-                        {att.name.substring(0, 1)}
+                        {att.Name.substring(0, 1)}
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={att.name} secondary={secondsToHms(att.duration)} />
+                <ListItemText primary={att.Name} secondary={secondsToHms(att.Duration)} />
             </ListItem>
         ))}
     </List>;
@@ -111,26 +111,45 @@ const RankingList = () => {
 const RankingHeader = () => {
     return <div>
         <Typography variant="h4" component="div" gutterBottom>
-            Outstanding meeting attendants
+            Hall of Fame
         </Typography>
         <Typography variant="h6" component="div" gutterBottom>
-            {new Date().getMonth()}/{new Date().getDate()}/{new Date().getFullYear()}
+            Office record for outstanding meeting attendant.
         </Typography>
+
     </div>;
 }
 
-export default class Ranking extends React.PureComponent<{}> {
-    public state = {
-        isOpen: false
-    };
-
-    public render() {
-
-        return (
-            <div>
-                <RankingHeader />
-                <RankingList />
-            </div>
-        );
+const ScoreCard = (participant: { score: number, participant: IMeetingParticipant }) => {
+    let imageLink = "/gold.png";
+    if (participant.score === 2) {
+        imageLink = "/silver.png";
+    } else if (participant.score === 3) {
+        imageLink = "/bronze.png";
     }
+    return <Card>
+        <CardMedia
+            component="img"
+            height="140"
+            image={imageLink}
+            alt="Trophy"
+        />
+        <CardContent>
+            <Typography>
+                #{participant.score}
+            </Typography>
+            <Typography variant="h5" component="div">
+                {participant.participant.Name}
+            </Typography>
+            <Typography>
+                {secondsToHms(participant.participant.Duration)}
+            </Typography>
+        </CardContent>
+    </Card>;
 }
+
+
+export default connect(
+    (state: ApplicationState) => state.Meeting,
+    MeetingStore.actionCreators
+)(Meeting);
