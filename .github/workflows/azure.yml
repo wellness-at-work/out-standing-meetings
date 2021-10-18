@@ -2,7 +2,7 @@ name: Build and deploy .NET Core app to Windows WebApp ase-outstandingmeetings
 on:
   push:
     branches:
-    - master
+    - main
 env:
   AZURE_WEBAPP_NAME: ase-outstandingmeetings
   AZURE_WEBAPP_PACKAGE_PATH: ./publish
