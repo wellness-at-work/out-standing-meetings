@@ -47,17 +47,24 @@ const useStyles = makeStyles((theme) => ({
 const SignInControl = () => {
     const classes = useStyles();
     const history = useHistory();
-    const handleSubmit= (event: { preventDefault: () => void; }) => {
+    const handleSubmit = (event: { preventDefault: () => void; }) => {
         history.push("/ranking");
         event.preventDefault();
     }
     return <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
+
+            <Typography component="h5" variant="h5">
+                Outstanding Meetings
+            </Typography>
+            <Typography component="h6" variant="h6">
+                Promoting wellness during office meetings.
+            </Typography>
             <Avatar className={classes.avatar}>
                 <LockOutlinedIcon />
             </Avatar>
-            <Typography component="h1" variant="h5">
+            <Typography component="h3" variant="h3">
                 Sign in
             </Typography>
             <form className={classes.form} onSubmit={handleSubmit}>
@@ -88,7 +95,7 @@ const SignInControl = () => {
     </Container>;
 }
 export default class SignIn extends React.PureComponent<{}>  {
-    
+
     public render() {
 
         return (

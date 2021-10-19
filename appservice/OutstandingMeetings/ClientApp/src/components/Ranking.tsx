@@ -10,8 +10,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import Whatshot from '@material-ui/icons/Whatshot';
-import { IMeetingParticipant } from '../interfaces/IMeetingParticipant';
 import { secondsToHms } from '../utils/utils';
+import { IMeetingParticipant } from '../interfaces/IMeetingParticipant';
 
 
 type MeetingProps =
@@ -21,6 +21,7 @@ type MeetingProps =
 
 const RankingView = (props: any) => {
     const meetingAttendants = props.props.meetingAttendants;
+    const allTimeRecord = props.props.allTimeRecord;
     return <div>
         <Grid container spacing={2}>
             <Grid item md={12}>
@@ -29,13 +30,13 @@ const RankingView = (props: any) => {
         </Grid>
         <Grid container spacing={2}>
             <Grid item xs={12} md={4}>
-                <ScoreCard participant={meetingAttendants[0]} score={1} />
+                <ScoreCard participant={allTimeRecord[0]} score={1} />
             </Grid>
             <Grid item xs={12} md={4}>
-                <ScoreCard participant={meetingAttendants[1]} score={2} />
+                <ScoreCard participant={allTimeRecord[1]} score={2} />
             </Grid>
             <Grid item xs={12} md={4}>
-                <ScoreCard participant={meetingAttendants[2]} score={3} />
+                <ScoreCard participant={allTimeRecord[2]} score={3} />
             </Grid>
         </Grid>
         <Grid container spacing={2}>
@@ -51,6 +52,21 @@ const RankingView = (props: any) => {
     </div>;
 }
 class Meeting extends React.PureComponent<MeetingProps> {
+    public componentDidMount() {
+        this.pollParticipants();
+    }
+    public componentDidUpdate() {
+        
+    }
+    ensureDataFetched() {
+       
+    }
+    pollParticipants() {
+        setInterval(()=>{
+            this.props.getUpdatedAttendants("");
+        }, 5000)
+        
+    }
     public render() {
         return (
             <RankingView props={this.props} />
@@ -82,7 +98,7 @@ const RankingList = (meetingAttendants: any) => {
                         <Whatshot />
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={att.Name} secondary={secondsToHms(att.Duration)} />
+                <ListItemText primary={att.name} secondary={secondsToHms(att.duration)} />
             </ListItem>
         ))}
         {meetingAttendants.slice(1, 5).map((att: any, idx: number) => (
@@ -92,17 +108,17 @@ const RankingList = (meetingAttendants: any) => {
                         {idx + 2}
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={att.Name} secondary={secondsToHms(att.Duration)} />
+                <ListItemText primary={att.name} secondary={secondsToHms(att.duration)} />
             </ListItem>
         ))}
         {meetingAttendants.slice(5).map((att: any) => (
             <ListItem key={att.id}>
                 <ListItemAvatar>
                     <Avatar>
-                        {att.Name.substring(0, 1)}
+                        {att.name.substring(0, 1)}
                     </Avatar>
                 </ListItemAvatar>
-                <ListItemText primary={att.Name} secondary={secondsToHms(att.Duration)} />
+                <ListItemText primary={att.name} secondary={secondsToHms(att.duration)} />
             </ListItem>
         ))}
     </List>;
@@ -111,10 +127,10 @@ const RankingList = (meetingAttendants: any) => {
 const RankingHeader = () => {
     return <div>
         <Typography variant="h4" component="div" gutterBottom>
-            Hall of Fame
+            Outstanding Meetings
         </Typography>
         <Typography variant="h6" component="div" gutterBottom>
-            Office record for outstanding meeting attendant.
+            Hall of fame record - most outstanding meeting attendants
         </Typography>
 
     </div>;
@@ -139,10 +155,10 @@ const ScoreCard = (participant: { score: number, participant: IMeetingParticipan
                 #{participant.score}
             </Typography>
             <Typography variant="h5" component="div">
-                {participant.participant.Name}
+                {participant.participant.name}
             </Typography>
             <Typography>
-                {secondsToHms(participant.participant.Duration)}
+                {secondsToHms(participant.participant.duration)}
             </Typography>
         </CardContent>
     </Card>;
@@ -150,6 +166,6 @@ const ScoreCard = (participant: { score: number, participant: IMeetingParticipan
 
 
 export default connect(
-    (state: ApplicationState) => state.Meeting,
-    MeetingStore.actionCreators
-)(Meeting);
+    (state: ApplicationState) => state.Meeting, // Selects which state properties are merged into the component's props
+    MeetingStore.actionCreators // Selects which action creators are merged into the component's props
+)(Meeting as any);
