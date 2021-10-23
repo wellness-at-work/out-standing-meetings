@@ -5,10 +5,10 @@ on:
     - function-app
 env:
   AZURE_FUNCTIONAPP_NAME: func-outstandingmeetings
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: gMeetings\published
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: ./function/publish
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 3.1.x
-  WORKING_DIRECTORY: gMeetings
+  WORKING_DIRECTORY: ./function/OutstandingMeetings/
   DOTNET_CORE_VERSION_INPROC: ''
 jobs:
   build-and-deploy:
