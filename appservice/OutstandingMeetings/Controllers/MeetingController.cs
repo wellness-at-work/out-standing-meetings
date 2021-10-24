@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
+using EnOutstandingMeetings;
 using Microsoft.AspNetCore.Mvc;
-using OutstandingMeetings.Data;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace OutstandingMeetings.Controllers
 {
@@ -9,9 +13,27 @@ namespace OutstandingMeetings.Controllers
     [Route("[controller]")]
     public class MeetingController : ControllerBase
     {
+        IConfiguration _configuration;
         [HttpGet("Participants")]
-        public MeetingParticipantReponse GetParticipants(string orgCode)
+        public async Task<MeetingParticipantReponse> GetParticipants(string orgCode)
         {
+
+            var statUrl = this._configuration["StatUrl"];
+
+            using (HttpClient client = new HttpClient())
+            {
+                client.DefaultRequestHeaders.Add("GroupId", orgCode);
+                var response = await client.GetStringAsync(statUrl);
+                var data = JsonConvert.DeserializeObject<MeetingParticipantReponse>(response);
+
+                if (data.AllTimeRecord != null)
+                {
+                    return data;
+                }
+            }
+
+
+
             var attendantList = new List<MeetingParticipant>();
             var allTimeRecord = new List<MeetingParticipant>();
             Random rnd = new Random();
@@ -50,6 +72,11 @@ namespace OutstandingMeetings.Controllers
             });
 
             return new MeetingParticipantReponse { AllTimeRecord = allTimeRecord, Participants = attendantList };
+        }
+
+        public MeetingController(IConfiguration configuration)
+        {
+            this._configuration = configuration;
         }
     }
 }

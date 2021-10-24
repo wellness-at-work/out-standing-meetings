@@ -12,6 +12,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Whatshot from '@material-ui/icons/Whatshot';
 import { secondsToHms } from '../utils/utils';
 import { IMeetingParticipant } from '../interfaces/IMeetingParticipant';
+import { getDefaultAttendants } from '../services/getAttendants';
 
 
 type MeetingProps =
@@ -56,17 +57,37 @@ class Meeting extends React.PureComponent<MeetingProps> {
         this.pollParticipants();
     }
     public componentDidUpdate() {
-        
+
     }
     ensureDataFetched() {
-       
+
     }
     pollParticipants() {
-        setInterval(()=>{
-            this.props.getUpdatedAttendants("");
+        setInterval(() => {
+            const qrParams = this.parseQueryString(this.props.location.search);
+            this.props.getUpdatedAttendants(qrParams["orgCode"]);
         }, 5000)
-        
+
     }
+
+    private parseQueryString(qs: string) {
+        const queryStrings = qs.split("?");
+        let qrCollection = null;
+        if (queryStrings.length > 1) {
+            const qsParams = queryStrings[1];
+            const qsParamCollection = qsParams.split("&");
+            qrCollection = {} as any;
+            for (let i = 0; i < qsParamCollection.length; i++) {
+                const keyValPair = qsParamCollection[i].split("=");
+                qrCollection[keyValPair[0]] = keyValPair[1];
+            }
+
+            return qrCollection;
+        }
+
+        return qrCollection;
+    }
+
     public render() {
         return (
             <RankingView props={this.props} />
@@ -143,6 +164,14 @@ const ScoreCard = (participant: { score: number, participant: IMeetingParticipan
     } else if (participant.score === 3) {
         imageLink = "/bronze.png";
     }
+
+    let rankedParticipant = participant.participant;
+
+    if (!participant.participant) {
+        let attendants = getDefaultAttendants();
+        rankedParticipant = attendants[0];
+    }
+
     return <Card>
         <CardMedia
             component="img"
@@ -155,10 +184,10 @@ const ScoreCard = (participant: { score: number, participant: IMeetingParticipan
                 #{participant.score}
             </Typography>
             <Typography variant="h5" component="div">
-                {participant.participant.name}
+                {rankedParticipant.name}
             </Typography>
             <Typography>
-                {secondsToHms(participant.participant.duration)}
+                {secondsToHms(rankedParticipant.duration)}
             </Typography>
         </CardContent>
     </Card>;

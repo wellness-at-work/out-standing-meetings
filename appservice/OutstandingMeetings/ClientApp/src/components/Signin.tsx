@@ -48,7 +48,7 @@ const SignInControl = () => {
     const classes = useStyles();
     const history = useHistory();
     const handleSubmit = (event: { preventDefault: () => void; }) => {
-        history.push("/ranking");
+        history.push("/ranking?orgCode=" + (event as any).target[0].value);
         event.preventDefault();
     }
     return <Container component="main" maxWidth="xs">
