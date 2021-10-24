@@ -9,7 +9,7 @@ env:
   AZURE_WEBAPP_PUBLISH_PROFILE: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 3.1.x
-  WORKING_DIRECTORY: ./appservice/OutstandingMeetings/ClientApp/
+  WORKING_DIRECTORY: ./appservice/OutstandingMeetings/
 jobs:
   build-and-deploy:
     runs-on: windows-latest
@@ -23,6 +23,9 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: 12.x
+    - name: npm install
+      working-directory: ./appservice/OutstandingMeetings/ClientApp/
+      run: npm install
     - name: Restore
       run: dotnet restore "${{ env.WORKING_DIRECTORY }}"
     - name: Build
