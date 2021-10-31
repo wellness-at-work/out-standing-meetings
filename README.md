@@ -8,7 +8,6 @@
 - Azure Function
 - Blob Storage
 - Microsoft Teams Bot
-- SignalR
 
 ## Architecture ##
 ![Out-standing Architecture](readme/images/arch.png "Architecture")
@@ -26,17 +25,15 @@ Contact sensors to standing tables and wearable pedometer sensor will be integra
 Future integration of sensors will make the solution more accessible by providing alternate ways to stay active during meetings for individuals with limited mobility.
 
 ## Project Structure ##
-- Folder `_deployment` cloud template and scripts to deploy the solution
+- Folder `.github` yaml templates and scripts to deploy resources to Azure
 - Folder `app-service` Azure App Service
 - Folder `bot` Microsoft Teams integrated Bot
-- Folder `SignalR` Real time communication with web sockets
 - Folder `function` Azure Function
-- Folder `storage` Azure Storage
 
 ## Contributors ##
 - Rupesh Kurvankattil 
-- Tariku Tessema
 - Steve Jones
+- Tariku Tessema
 
 ## References
 <a id="1">[1]</a> 

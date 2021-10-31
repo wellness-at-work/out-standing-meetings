@@ -2,5 +2,6 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <NameOfLastUsedPublishProfile>C:\WellnessHack\Microsoft-Teams-Samples\samples\meetings-sidepanel\csharp\Side Panel\Properties\PublishProfiles\app-outstandingmeeting - Web Deploy.pubxml</NameOfLastUsedPublishProfile>
+    <ActiveDebugProfile>IIS Express</ActiveDebugProfile>
   </PropertyGroup>
 </Project>
