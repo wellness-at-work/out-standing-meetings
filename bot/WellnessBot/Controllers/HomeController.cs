@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using SidePanel.Models;
+using SidePanel.Model;
 
 namespace SidePanel.Controllers
 {
@@ -18,7 +19,7 @@ namespace SidePanel.Controllers
     {
         public static string conversationId;
         public static string serviceUrl;
-        public static List<TaskInfo> taskInfoData = new List<TaskInfo>();
+        //public static List<TaskInfo> taskInfoData = new List<TaskInfo>();
 
         private readonly IConfiguration _configuration;
         private readonly AppCredentials botCredentials;
@@ -45,112 +46,107 @@ namespace SidePanel.Controllers
             return PartialView("SidePanel");
         }
 
+        [HttpPost]
         [Route("/Home/wellnessstyle")]
-        public string AddWellnessStyle (string wellnesscontext)
+        public async Task<IActionResult> AddWellnessStyle (OutstandingMeeting meetingContext)
         {
-            return wellnesscontext;
-        }
-
-        //Add Default Agenda to the List
-        private List<TaskInfo> SidePanelDefaultAgendaList()
-        {
-            if (taskInfoData.Count == 0)
+            var groupCreated = await CreateGroup(meetingContext);
+            if (groupCreated)
             {
-                var tData1 = new TaskInfo
+                var joinGroup = new JoinGroup { Id = meetingContext.UserId, Name = meetingContext.User, GroupId = meetingContext.Group, Duration = 15.0F, Activity = null };
+                var joinGroupContent = JsonConvert.SerializeObject(joinGroup);
+                using (var httpClient = new HttpClient())
                 {
-                    Title = "Approve 5% dividend payment to shareholders."
-                };
-                taskInfoData.Add(tData1);
-                var tData2 = new TaskInfo
+                    var dataParams = new Dictionary<string, string>();
+                    dataParams.Add("Payload", joinGroupContent);
+                    dataParams.Add("ProcessingType", "2");
+                    dataParams.Add("Content-Type", "application/x-www-form-urlencoded");
+                    var url = $"{_configuration["WellnessTrackerUrl"]}/process?code={_configuration["wellnesstrackercode"]}";
+                    var response = await httpClient.PostAsync(url, new FormUrlEncodedContent(dataParams));
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var test = "hello";
+                    }
+                }
+            }
+            string result = "Your status has been updated";
+
+            return Ok(result);
+        }
+
+
+
+        private async Task<bool> CreateGroup(OutstandingMeeting meetingContext)
+        {
+            var groupId = new Group { Id = meetingContext.Group };
+            //StringContent groupContent = new StringContent(JsonConvert.SerializeObject(groupId));
+            var groupContent = JsonConvert.SerializeObject(groupId);
+            using (var httpClient = new HttpClient())
+            {
+                var dataParams = new Dictionary<string, string>();
+                dataParams.Add("Payload", groupContent);
+                dataParams.Add("ProcessingType", "1");
+                dataParams.Add("Content-Type", "application/x-www-form-urlencoded");
+                var url = $"{_configuration["WellnessTrackerUrl"]}/process?code={_configuration["wellnesstrackercode"]}";
+                var response = await httpClient.PostAsync(url, new FormUrlEncodedContent(dataParams));
+                if (response.IsSuccessStatusCode)
                 {
-                    Title = "Increase research budget by 10%."
-                };
-                taskInfoData.Add(tData2);
-                var tData3 = new TaskInfo
-                {
-                    Title = "Continue with WFH for next 3 months."
-                };
-                taskInfoData.Add(tData3);
+                    return true;
+                }
             }
-            return taskInfoData;
+            return false;
         }
 
-        //Add New Agenda Point to the Agenda List
-        [Route("/Home/AddNewAgendaPoint")]
-        public List<TaskInfo> AddNewAgendaPoint(TaskInfo taskInfo)
-        {
-            var tData = new TaskInfo
-            {
-                Title = taskInfo.Title
-            };
-            taskInfoData.Add(tData);
-            return taskInfoData;
-        }
+        
 
-        //Senda Agenda List to the Meeting Chat
-        [Route("/Home/SendAgenda")]
-        public void SendAgenda()
-        {
-            string appId = _configuration["MicrosoftAppId"];
-            string appSecret = _configuration["MicrosoftAppPassword"];
-            using var connector = new ConnectorClient(new Uri(serviceUrl), appId, appSecret);
-            MicrosoftAppCredentials.TrustServiceUrl(serviceUrl, DateTime.MaxValue);
-            var replyActivity = new Activity();
-            replyActivity.Type = "message";
-            replyActivity.Conversation = new ConversationAccount(id: conversationId);
-            var adaptiveAttachment = AgendaAdaptiveList();
-            replyActivity.Attachments = new List<Attachment> { adaptiveAttachment };
-            var response = connector.Conversations.SendToConversationAsync(conversationId, replyActivity).Result;
-        }
+        ////Create Adaptive Card with the Agenda List
+        //private Attachment AgendaAdaptiveList()
+        //{
+        //    AdaptiveCard adaptiveCard = new AdaptiveCard(new AdaptiveSchemaVersion(1, 0));
+        //    adaptiveCard.Body = new List<AdaptiveElement>()
+        //    {
+        //        new AdaptiveTextBlock(){Text="Here is the Agenda for Today", Weight=AdaptiveTextWeight.Bolder}
+        //    };
 
-        //Create Adaptive Card with the Agenda List
-        private Attachment AgendaAdaptiveList()
-        {
-            AdaptiveCard adaptiveCard = new AdaptiveCard(new AdaptiveSchemaVersion(1, 0));
-            adaptiveCard.Body = new List<AdaptiveElement>()
-            {
-                new AdaptiveTextBlock(){Text="Here is the Agenda for Today", Weight=AdaptiveTextWeight.Bolder}
-            };
+        //    foreach (var agendaPoint in taskInfoData)
+        //    {
+        //        var textBlock = new AdaptiveTextBlock() { Text = "- " + agendaPoint.Title + " \r" };
+        //        adaptiveCard.Body.Add(textBlock);
+        //    }
 
-            foreach (var agendaPoint in taskInfoData)
-            {
-                var textBlock = new AdaptiveTextBlock() { Text = "- " + agendaPoint.Title + " \r" };
-                adaptiveCard.Body.Add(textBlock);
-            }
+        //    return new Attachment()
+        //    {
+        //        ContentType = AdaptiveCard.ContentType,
+        //        Content = adaptiveCard
+        //    };
+        //}
 
-            return new Attachment()
-            {
-                ContentType = AdaptiveCard.ContentType,
-                Content = adaptiveCard
-            };
-        }
+        ////Check if the Participant Role is Organizer
+        //[Route("/Home/IsOrganizer")]
+        //public async Task<ActionResult<bool>> IsOrganizer(string userId, string meetingId, string tenantId)
+        //{
+        //    var response = await GetMeetingRoleAsync(meetingId, userId, tenantId);
+        //    if (response.meeting.role == "Organizer")
+        //        return true;
+        //    else
+        //        return false;
+        //}
 
-        //Check if the Participant Role is Organizer
-        [Route("/Home/IsOrganizer")]
-        public async Task<ActionResult<bool>> IsOrganizer(string userId, string meetingId, string tenantId)
-        {
-            var response = await GetMeetingRoleAsync(meetingId, userId, tenantId);
-            if (response.meeting.role == "Organizer")
-                return true;
-            else
-                return false;
-        }
+        //public async Task<UserMeetingRoleServiceResponse> GetMeetingRoleAsync(string meetingId, string userId, string tenantId)
+        //{
+        //    if (serviceUrl == null)
+        //    {
+        //        throw new InvalidOperationException("Service URL is not avaiable for tenant ID " + tenantId);
+        //    }
 
-        public async Task<UserMeetingRoleServiceResponse> GetMeetingRoleAsync(string meetingId, string userId, string tenantId)
-        {
-            if (serviceUrl == null)
-            {
-                throw new InvalidOperationException("Service URL is not avaiable for tenant ID " + tenantId);
-            }
+        //    using var getRoleRequest = new HttpRequestMessage(HttpMethod.Get, new Uri(new Uri(serviceUrl), string.Format("v1/meetings/{0}/participants/{1}?tenantId={2}", meetingId, userId, tenantId)));
+        //    getRoleRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await this.botCredentials.GetTokenAsync());
 
-            using var getRoleRequest = new HttpRequestMessage(HttpMethod.Get, new Uri(new Uri(serviceUrl), string.Format("v1/meetings/{0}/participants/{1}?tenantId={2}", meetingId, userId, tenantId)));
-            getRoleRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await this.botCredentials.GetTokenAsync());
+        //    using var getRoleResponse = await this.httpClient.SendAsync(getRoleRequest);
+        //    getRoleResponse.EnsureSuccessStatusCode();
 
-            using var getRoleResponse = await this.httpClient.SendAsync(getRoleRequest);
-            getRoleResponse.EnsureSuccessStatusCode();
-
-            var response = JsonConvert.DeserializeObject<UserMeetingRoleServiceResponse>(await getRoleResponse.Content.ReadAsStringAsync());
-            return response;
-        }
+        //    var response = JsonConvert.DeserializeObject<UserMeetingRoleServiceResponse>(await getRoleResponse.Content.ReadAsStringAsync());
+        //    return response;
+        //}
     }
 }

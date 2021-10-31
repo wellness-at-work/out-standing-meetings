@@ -90,18 +90,18 @@ namespace Microsoft.BotBuilderSamples.Bots
 
             //    throw ex;
             //}
-            var action = Newtonsoft.Json.JsonConvert.DeserializeObject<ActionBase>(turnContext.Activity.Value.ToString());
-            string strTurnContext = JsonConvert.SerializeObject(turnContext.Activity);
-            var wellnessTracker = new WellnessTracker { Name = turnContext.Activity.From.Name, WellnessType = action.Type };
-            StringContent httpContent = new StringContent(JsonConvert.SerializeObject(wellnessTracker));
-            using (var client = new HttpClient())
-            {
-                var response = await client.PostAsync(_config["WellnessTrackerUrl"], httpContent);
-                if (response.IsSuccessStatusCode)
-                {
-                    await turnContext.SendActivityAsync($"{turnContext.Activity.From.Name} Your status is updated to {action.Type}");
-                }
-            }
+            //var action = Newtonsoft.Json.JsonConvert.DeserializeObject<ActionBase>(turnContext.Activity.Value.ToString());
+            //string strTurnContext = JsonConvert.SerializeObject(turnContext.Activity);
+            //var wellnessTracker = new WellnessTracker { Name = turnContext.Activity.From.Name, WellnessType = action.Type };
+            //StringContent httpContent = new StringContent(JsonConvert.SerializeObject(wellnessTracker));
+            //using (var client = new HttpClient())
+            //{
+            //    var response = await client.PostAsync(_config["WellnessTrackerUrl"], httpContent);
+            //    if (response.IsSuccessStatusCode)
+            //    {
+            //        await turnContext.SendActivityAsync($"{turnContext.Activity.From.Name} Your status is updated to {action.Type}");
+            //    }
+            //}
             
         }
     }

@@ -6,29 +6,13 @@
         Your Wellness Style
     </div>
     <div id="wellnessbuttons">
-            <button class="wellnessButton" id="standing" onclick="wellnessfunction(this.id)">Standing</button>
-            <button class="wellnessButton" id="sitting">Sitting</button>
+        <button class="wellnessButton" id="standing" onclick="wellnessfunction(this.id)">Standing</button>
+        <button class="wellnessButton" id="sitting" onclick="wellnessfunction(this.id)">Sitting</button>
+        <button class="wellnessButton" id="endtrack" onclick="wellnessfunction(this.id)">End Tracking</button>
     </div>
 <div id="message">
 
 </div>
-    @*<div id="meetingOrganizer">
-        <div id="agendaButtonDiv">
-            <button id="agendaButton" onclick="showAgendaInput()">Add New Agenda Item</button>
-        </div>
-        <div id="agendaInputDiv" style="display:none">
-            <input type="text" id="agendaInput"><br>
-            <button id="addAgendaButton" onclick="closeAgendaInput()">Add</button>
-        </div>
-    </div>
-    <div id="list">
-        <ol type="1" id="agendaList">
-
-            @await Html.PartialAsync("SidePanelParticalView", Model)
-
-        </ol>
-    </div>*@
-    <button id="publishAgendaButton">Publish Agenda</button>
 
     <script type="text/javascript">
 
@@ -57,92 +41,27 @@
         }
 
         function wellnessfunction(wellnesstype) {
-            microsoftTeams.getContext((context) => {
-                userId = context.channelName;
-                contextData = '';
+            //microsoftTeams.getContext((context) => {
+            groupDomain = 'rkwellnesshack.sharepoint.com';
+            userLogin = 'rupeshkurvankattil@rkwellnesshack.onmicrosoft.com';
+            contextData = { UserId:'20d4f4a2-8190-4cff-893b-646173b4cdc3', Group: groupDomain, User: userLogin, ActivityType: wellnesstype };
                 //const meetingcontext = context;
                 $.ajax({
-                    type: 'GET',
+                    type: 'POST',
                     url: '/Home/wellnessstyle',
                     //dataType: 'json',
-                    data: { wellnesscontext: userId },
+                    data: { meetingContext: contextData },
                     success: function (result) {
-                        Object.keys(context).forEach(e => {
-                            contextData = contextData + ", " + e + ": " + context[e];
-                        });
+                        //Object.keys(context).forEach(e => {
+                        //    contextData = contextData + ", " + e + ": " + context[e];
+                        //});
                         document.getElementById("message").innerText = contextData;
-                        //console.log(response);
-                        //RoleFunction(response);
                     },
                     error: function (xhr, textStatus, errorThrown) {
                         console.log("textStatus: " + textStatus);
                     },
                 });
             event.preventDefault();
-            })
+            //})
         }
-
-        //Enabling Organizer Tools
-        function RoleFunction(response) {
-            //if (response === true) {
-            //    document.getElementById("meetingOrganizer").style.display = "block";
-            //    document.getElementById("publishAgendaButton").style.display = "block";
-            //}
-            //else {
-            //    document.getElementById("meetingOrganizer").style.display = "none";
-            //    document.getElementById("publishAgendaButton").style.display = "none";
-            //}
-        }
-
-        //Toggle Agenda Add Button/Agenda Text Input
-        function showAgendaInput() {
-            //document.getElementById("agendaInputDiv").style.display = "block";
-            //document.getElementById("agendaButtonDiv").style.display = "none";
-            //document.getElementById("agendaInput").focus();
-            //event.preventDefault();
-        }
-
-        //Publish the Agenda to the Chat Conversation
-        $("#publishAgendaButton").on('click', function (e) {
-            $.ajax({
-                type: 'GET',
-                url: '/Home/SendAgenda',
-                dataType: 'json',
-                success: function (response) {
-                    console.log(response);
-                    console.log("Agenda Published to Chat");
-                },
-                error: function (xhr, textStatus, errorThrown) {
-                    console.log("textStatus: " + textStatus + ", errorThrown:" + response);
-                },
-            });
-            event.preventDefault();
-        })
-
-        //On Click of Add Button Add the Agenda Point to the List
-        $("#addAgendaButton").on('click', function (e) {
-            document.getElementById("agendaInputDiv").style.display = "none";
-            document.getElementById("agendaButtonDiv").style.display = "block";
-            var newAgendaItem = $("#agendaInput").val();
-            if (newAgendaItem != "") {
-                e.preventDefault();
-                let taskInfo = {
-                    title: newAgendaItem
-                };
-                $.ajax({
-                    type: 'GET',
-                    url: '/Home/AddNewAgendaPoint',
-                    dataType: 'json',
-                    data: taskInfo,
-                    success: function (response) {
-                        console.log(response);
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        console.log("textStatus: " + textStatus + ", errorThrown:" + errorThrown);
-                    },
-                });
-                document.getElementById("agendaInput").value = '';
-            }
-            event.preventDefault();
-        })
     </script>
