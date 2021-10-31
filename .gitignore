@@ -1,1 +1,6 @@
 _deployment/run.ps1
+bin
+obj
+.vs
+PublishProfiles
+*.csproj.user
