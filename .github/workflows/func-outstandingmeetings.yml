@@ -5,7 +5,7 @@ on:
     - FunctionAppAction
 env:
   AZURE_FUNCTIONAPP_NAME: func-outstandingmeetings
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: function
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: ./function/OutstandingMeetings/
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 3.1.x
   WORKING_DIRECTORY: ./function/OutstandingMeetings/
