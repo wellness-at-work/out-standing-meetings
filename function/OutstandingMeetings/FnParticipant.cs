@@ -21,29 +21,34 @@ namespace FnOutstandingMeetings
            [Table(nameof(MeetingGroup))] CloudTable meetingGroupTable,
             ILogger log)
         {
-            var participantId = req.Headers["ParticipantId"];
-            var groupId = req.Headers["GroupId"];
-            var status = int.Parse(req.Headers["Status"]);
+            var payload = req.Form["Payload"];
 
             var groupClient = new DataAccess<MeetingGroup>(meetingGroupTable);
             var response = new MeetingParticipantReponse();
 
-            var dbGroup = await groupClient.GetAsync(nameof(MeetingGroup), groupId);
-
-            if (dbGroup != null)
+            if (!string.IsNullOrEmpty(payload))
             {
+                var statusUpdateRequest = JsonConvert.DeserializeObject<StausUpdateRequest>(payload);
+                var participantId = statusUpdateRequest.ParticipantId;
+                var groupId = statusUpdateRequest.GroupId;
+                var status = int.Parse(statusUpdateRequest.StatusId);
 
-                var participants = string.IsNullOrEmpty(dbGroup.ParticipantsSerialized) ? new List<MeetingParticipant>() :
-                    JsonConvert.DeserializeObject<List<MeetingParticipant>>(dbGroup.ParticipantsSerialized);
-                var participant = participants.Where(p => p.Id == participantId).FirstOrDefault();
+                var dbGroup = await groupClient.GetAsync(nameof(MeetingGroup), groupId);
 
-                if (participant == null)
+                if (dbGroup != null)
                 {
-                    var newparticipant = new MeetingParticipant
+
+                    var participants = string.IsNullOrEmpty(dbGroup.ParticipantsSerialized) ? new List<MeetingParticipant>() :
+                        JsonConvert.DeserializeObject<List<MeetingParticipant>>(dbGroup.ParticipantsSerialized);
+                    var participant = participants.Where(p => p.Id == participantId).FirstOrDefault();
+
+                    if (participant == null)
                     {
-                        Id = participantId,
-                        GroupId = groupId,
-                        Activity = new List<ParticipantActivity>
+                        var newparticipant = new MeetingParticipant
+                        {
+                            Id = participantId,
+                            GroupId = groupId,
+                            Activity = new List<ParticipantActivity>
                         {
                             new ParticipantActivity
                             {
@@ -51,27 +56,28 @@ namespace FnOutstandingMeetings
                                 Status = (StandingStatus) status
                             }
                         }
-                    };
-                    participants.Add(newparticipant);
-                }
-                else
-                {
-                    if(participant.Activity == null)
+                        };
+                        participants.Add(newparticipant);
+                    }
+                    else
                     {
-                        participant.Activity = new List<ParticipantActivity>();
+                        if (participant.Activity == null)
+                        {
+                            participant.Activity = new List<ParticipantActivity>();
+                        }
+
+                        participant.Activity.Add(
+                            new ParticipantActivity
+                            {
+                                EpochTimeStamp = ConvertFromUnixTimestamp(DateTime.Now),
+                                Status = (StandingStatus)status
+                            });
                     }
 
-                    participant.Activity.Add(
-                        new ParticipantActivity
-                        {
-                            EpochTimeStamp = ConvertFromUnixTimestamp(DateTime.Now),
-                            Status = (StandingStatus)status
-                        });
+                    dbGroup.ParticipantsSerialized = JsonConvert.SerializeObject(participants);
+                    await groupClient.ReplaceAsync(dbGroup);
                 }
-               
-                dbGroup.ParticipantsSerialized = JsonConvert.SerializeObject(participants);
-                await groupClient.ReplaceAsync(dbGroup);
-            }
+            }     
             return (ActionResult)new OkObjectResult(response);
         }
 

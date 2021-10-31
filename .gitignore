@@ -1,1 +1,4 @@
 _deployment/run.ps1
+/data/Entities/bin
+/data/Entities/obj
+/OutstandingMeetings/.vs
