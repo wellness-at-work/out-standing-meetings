@@ -24,7 +24,7 @@ namespace FnOutstandingMeetings
             var payload = req.Form["Payload"];
 
             var groupClient = new DataAccess<MeetingGroup>(meetingGroupTable);
-            var response = new MeetingParticipantReponse();
+            var response = new ParticipantActivity();
 
             if (!string.IsNullOrEmpty(payload))
             {
@@ -37,10 +37,14 @@ namespace FnOutstandingMeetings
 
                 if (dbGroup != null)
                 {
-
                     var participants = string.IsNullOrEmpty(dbGroup.ParticipantsSerialized) ? new List<MeetingParticipant>() :
                         JsonConvert.DeserializeObject<List<MeetingParticipant>>(dbGroup.ParticipantsSerialized);
                     var participant = participants.Where(p => p.Id == participantId).FirstOrDefault();
+                    var participantActivity = new ParticipantActivity
+                    {
+                        EpochTimeStamp = ConvertFromUnixTimestamp(DateTime.Now),
+                        Status = (StandingStatus)status
+                    };
 
                     if (participant == null)
                     {
@@ -50,11 +54,7 @@ namespace FnOutstandingMeetings
                             GroupId = groupId,
                             Activity = new List<ParticipantActivity>
                         {
-                            new ParticipantActivity
-                            {
-                                EpochTimeStamp = ConvertFromUnixTimestamp(DateTime.Now),
-                                Status = (StandingStatus) status
-                            }
+                           participantActivity
                         }
                         };
                         participants.Add(newparticipant);
@@ -66,16 +66,13 @@ namespace FnOutstandingMeetings
                             participant.Activity = new List<ParticipantActivity>();
                         }
 
-                        participant.Activity.Add(
-                            new ParticipantActivity
-                            {
-                                EpochTimeStamp = ConvertFromUnixTimestamp(DateTime.Now),
-                                Status = (StandingStatus)status
-                            });
+                        participant.Activity.Add(participantActivity);
                     }
 
                     dbGroup.ParticipantsSerialized = JsonConvert.SerializeObject(participants);
                     await groupClient.ReplaceAsync(dbGroup);
+
+                    response = participantActivity;
                 }
             }     
             return (ActionResult)new OkObjectResult(response);
