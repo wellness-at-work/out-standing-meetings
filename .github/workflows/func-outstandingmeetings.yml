@@ -2,7 +2,9 @@ name: Build and deploy .NET Core application to Function App func-outstandingmee
 on:
   push:
     branches:
-    - FunctionAppAction
+      - FunctionAppAction
+    paths:
+      - "function/**"
 env:
   AZURE_FUNCTIONAPP_NAME: func-outstandingmeetings
   AZURE_FUNCTIONAPP_PACKAGE_PATH: ./function/OutstandingMeetings/
