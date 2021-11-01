@@ -1,0 +1,32 @@
+{
+  "type": "AdaptiveCard",
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "version": "1.2",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "Wellness is a very important part of life. Select your wellness style!!",
+      "wrap": true
+    }
+
+  ],
+  "actions": [
+    {
+      "type": "Action.Submit",
+      "id": "standing",
+      "title": "I am Standing!",
+      "data": {
+        "type": "standing"
+      }
+    },
+    {
+      "type": "Action.Submit",
+      "id": "sitting",
+      "title": "I am Sitting!",
+      "data": {
+        "type": "sitting"
+      }
+
+    }
+  ]
+}
