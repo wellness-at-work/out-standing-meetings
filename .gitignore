@@ -1,1 +1,3 @@
 _deployment/run.ps1
+/data/Entities/obj
+/data/Entities/bin
