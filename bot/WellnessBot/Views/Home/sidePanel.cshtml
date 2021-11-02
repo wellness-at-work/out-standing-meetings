@@ -8,7 +8,6 @@
     <div id="wellnessbuttons">
         <button class="wellnessButton" id="standing" onclick="wellnessfunction(this.id)">Standing</button>
         <button class="wellnessButton" id="sitting" onclick="wellnessfunction(this.id)">Sitting</button>
-        <button class="wellnessButton" id="endtrack" onclick="wellnessfunction(this.id)">End Tracking</button>
     </div>
 <div id="message">
 
@@ -41,27 +40,28 @@
         }
 
         function wellnessfunction(wellnesstype) {
-            //microsoftTeams.getContext((context) => {
-            groupDomain = 'rkwellnesshack.sharepoint.com';
-            userLogin = 'rupeshkurvankattil@rkwellnesshack.onmicrosoft.com';
-            contextData = { UserId:'20d4f4a2-8190-4cff-893b-646173b4cdc3', Group: groupDomain, User: userLogin, ActivityType: wellnesstype };
-                //const meetingcontext = context;
-                $.ajax({
-                    type: 'POST',
-                    url: '/Home/wellnessstyle',
-                    //dataType: 'json',
-                    data: { meetingContext: contextData },
-                    success: function (result) {
-                        //Object.keys(context).forEach(e => {
-                        //    contextData = contextData + ", " + e + ": " + context[e];
-                        //});
-                        document.getElementById("message").innerText = contextData;
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        console.log("textStatus: " + textStatus);
-                    },
-                });
-            event.preventDefault();
-            //})
+            microsoftTeams.getContext((context) => {
+                groupDomain = context.teamSiteDomain;
+                userLogin = context.loginHint;
+                userId = context.userObjectId;
+                contextData = { UserId: userId, Group: groupDomain, User: userLogin, ActivityType: wellnesstype };
+                    //const meetingcontext = context;
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Home/wellnessstyle',
+                        //dataType: 'json',
+                        data: { meetingContext: contextData },
+                        success: function (result) {
+                            //Object.keys(context).forEach(e => {
+                            //    contextData = contextData + ", " + e + ": " + context[e];
+                            //});
+                            document.getElementById("message").innerText = result;
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            console.log("textStatus: " + textStatus);
+                        },
+                    });
+                event.preventDefault();
+            })
         }
     </script>

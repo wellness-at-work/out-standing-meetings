@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FnOutstandingMeetings", "..
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SidePanel", "..\..\..\bot\WellnessBot\SidePanel.csproj", "{A503A533-6F4A-45E4-94BB-98348394BA39}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnOutstandingMeetings", "..\..\..\data\Entities\EnOutstandingMeetings.csproj", "{F74745AF-6AF1-489E-85B0-B0AD6C0FC135}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{A503A533-6F4A-45E4-94BB-98348394BA39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A503A533-6F4A-45E4-94BB-98348394BA39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A503A533-6F4A-45E4-94BB-98348394BA39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F74745AF-6AF1-489E-85B0-B0AD6C0FC135}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F74745AF-6AF1-489E-85B0-B0AD6C0FC135}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F74745AF-6AF1-489E-85B0-B0AD6C0FC135}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F74745AF-6AF1-489E-85B0-B0AD6C0FC135}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

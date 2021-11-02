@@ -15,8 +15,7 @@ namespace SidePanel.Model
 
     public enum WellnessActivityType
     {
-        Standing,
-        Sitting,
-        EndTrack
+        Standing = 1,
+        Sitting = 2
     }
 }
