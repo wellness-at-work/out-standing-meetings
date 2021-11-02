@@ -2,7 +2,7 @@ name: Build and deploy .NET Core application to Function App func-outstandingmee
 on:
   push:
     branches:
-      - FunctionAppAction
+      - main
     paths:
       - "function/**"
 env:
