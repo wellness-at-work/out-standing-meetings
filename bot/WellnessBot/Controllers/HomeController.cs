@@ -117,7 +117,6 @@ namespace SidePanel.Controllers
         private async Task<bool> CreateGroup(OutstandingMeeting meetingContext)
         {
             var groupId = new Group { Id = meetingContext.Group };
-            //StringContent groupContent = new StringContent(JsonConvert.SerializeObject(groupId));
             var groupContent = JsonConvert.SerializeObject(groupId);
             using (var httpClient = new HttpClient())
             {
@@ -134,57 +133,5 @@ namespace SidePanel.Controllers
             }
             return false;
         }
-
-        
-
-        ////Create Adaptive Card with the Agenda List
-        //private Attachment AgendaAdaptiveList()
-        //{
-        //    AdaptiveCard adaptiveCard = new AdaptiveCard(new AdaptiveSchemaVersion(1, 0));
-        //    adaptiveCard.Body = new List<AdaptiveElement>()
-        //    {
-        //        new AdaptiveTextBlock(){Text="Here is the Agenda for Today", Weight=AdaptiveTextWeight.Bolder}
-        //    };
-
-        //    foreach (var agendaPoint in taskInfoData)
-        //    {
-        //        var textBlock = new AdaptiveTextBlock() { Text = "- " + agendaPoint.Title + " \r" };
-        //        adaptiveCard.Body.Add(textBlock);
-        //    }
-
-        //    return new Attachment()
-        //    {
-        //        ContentType = AdaptiveCard.ContentType,
-        //        Content = adaptiveCard
-        //    };
-        //}
-
-        ////Check if the Participant Role is Organizer
-        //[Route("/Home/IsOrganizer")]
-        //public async Task<ActionResult<bool>> IsOrganizer(string userId, string meetingId, string tenantId)
-        //{
-        //    var response = await GetMeetingRoleAsync(meetingId, userId, tenantId);
-        //    if (response.meeting.role == "Organizer")
-        //        return true;
-        //    else
-        //        return false;
-        //}
-
-        //public async Task<UserMeetingRoleServiceResponse> GetMeetingRoleAsync(string meetingId, string userId, string tenantId)
-        //{
-        //    if (serviceUrl == null)
-        //    {
-        //        throw new InvalidOperationException("Service URL is not avaiable for tenant ID " + tenantId);
-        //    }
-
-        //    using var getRoleRequest = new HttpRequestMessage(HttpMethod.Get, new Uri(new Uri(serviceUrl), string.Format("v1/meetings/{0}/participants/{1}?tenantId={2}", meetingId, userId, tenantId)));
-        //    getRoleRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await this.botCredentials.GetTokenAsync());
-
-        //    using var getRoleResponse = await this.httpClient.SendAsync(getRoleRequest);
-        //    getRoleResponse.EnsureSuccessStatusCode();
-
-        //    var response = JsonConvert.DeserializeObject<UserMeetingRoleServiceResponse>(await getRoleResponse.Content.ReadAsStringAsync());
-        //    return response;
-        //}
     }
 }

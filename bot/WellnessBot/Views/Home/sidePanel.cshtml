@@ -15,7 +15,6 @@
 
     <script type="text/javascript">
 
-        //Default Action On View Render
         microsoftTeams.initialize();
         function wellnessfunction(wellnesstype) {
             microsoftTeams.getContext((context) => {
@@ -23,7 +22,7 @@
                 userLogin = context.loginHint;
                 userId = context.userObjectId;
                 contextData = { UserId: userId, Group: groupDomain, User: userLogin, ActivityType: wellnesstype };
-                    //const meetingcontext = context;
+
                     $.ajax({
                         type: 'POST',
                         url: '/Home/wellnessstyle',
