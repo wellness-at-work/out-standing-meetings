@@ -3,7 +3,7 @@
 }
 
     <div class="agendaTitle">
-        Your Wellness Style
+        Out<span style="color:red">STANDING</span> Meeting
     </div>
     <div id="wellnessbuttons">
         <button class="wellnessButton" id="standing" onclick="wellnessfunction(this.id)">Standing</button>
@@ -17,28 +17,6 @@
 
         //Default Action On View Render
         microsoftTeams.initialize();
-        var userId = "";
-        window.onload = function () {
-            microsoftTeams.getContext(function (context) {
-                userId = context.userObjectId;
-                var meetingId = context.meetingId;
-                var tenantId = context.tid;
-                $.ajax({
-                    type: 'GET',
-                    url: '/Home/IsOrganizer',
-                    dataType: 'json',
-                    data: { userId: userId, meetingId: meetingId, tenantId: tenantId },
-                    success: function (response) {
-                        console.log(response);
-                        //RoleFunction(response);
-                    },
-                    error: function (xhr, textStatus, errorThrown) {
-                        console.log("textStatus: " + textStatus + ", errorThrown:" + response);
-                    },
-                });
-            })
-        }
-
         function wellnessfunction(wellnesstype) {
             microsoftTeams.getContext((context) => {
                 groupDomain = context.teamSiteDomain;
@@ -49,13 +27,16 @@
                     $.ajax({
                         type: 'POST',
                         url: '/Home/wellnessstyle',
-                        //dataType: 'json',
                         data: { meetingContext: contextData },
                         success: function (result) {
-                            //Object.keys(context).forEach(e => {
-                            //    contextData = contextData + ", " + e + ": " + context[e];
-                            //});
                             document.getElementById("message").innerText = result;
+                            if (wellnesstype === 'standing') {
+                                document.getElementById('standing').disabled = true;
+                                document.getElementById('sitting').disabled = false;
+                            } else {
+                                document.getElementById('sitting').disabled = true;
+                                document.getElementById('standing').disabled = false;
+                            }
                         },
                         error: function (xhr, textStatus, errorThrown) {
                             console.log("textStatus: " + textStatus);

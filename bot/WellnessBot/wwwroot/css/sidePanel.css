@@ -1,6 +1,7 @@
 ﻿body {
     color: white;
-    background-color: #201f1f;
+    /*background-color: #201f1f;*/
+    background-color: darkslategrey;
 }
 
 p {
@@ -13,18 +14,20 @@ p {
     font-weight: bold;
     margin: 15px;
     font-family: Georgia, 'Times New Roman', Times, serif;
-    background-color: #201f1f
+    /*background-color: #201f1f*/
 }
 
 .wellnessButton {
     font-weight: bold;
-    background-color: #efef;
+    /*background-color: #efef;*/
+    background-color:cornflowerblue;
     font-size: 18px;
     margin: 15px;
     border: 1px solid #e5e5e5;
     border-radius: 10px;
     padding: 8px;
     cursor: pointer;
+    color:aliceblue;
 }
 
 #agendaInput {
@@ -44,6 +47,10 @@ p {
     margin-left: 15px;
     cursor: pointer;
     padding: 5px;
+}
+
+#message{
+    color:black;
 }
 
 #agendaList {
