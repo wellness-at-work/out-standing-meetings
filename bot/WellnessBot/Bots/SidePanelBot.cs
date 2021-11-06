@@ -1,9 +1,5 @@
-﻿// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License.
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using AdaptiveCards;
@@ -12,9 +8,7 @@ using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Teams;
 using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using SidePanel.Controllers;
-using SidePanel.Models;
 
 namespace Microsoft.BotBuilderSamples.Bots
 {
@@ -37,9 +31,7 @@ namespace Microsoft.BotBuilderSamples.Bots
             {
                 await HandleActions(turnContext);
             }
-            //var replyText = "Hello and welcome **" + turnContext.Activity.From.Name + "** to the Meeting Extensibility SidePanel app.";
-            //await turnContext.SendActivityAsync(MessageFactory.Text(replyText, replyText), cancellationToken);
-        }
+       }
 
         protected override async Task OnMembersAddedAsync(IList<ChannelAccount> membersAdded, ITurnContext<IConversationUpdateActivity> turnContext, CancellationToken cancellationToken)
         {
@@ -81,27 +73,6 @@ namespace Microsoft.BotBuilderSamples.Bots
 
         private async Task HandleActions(ITurnContext<IMessageActivity> turnContext)
         {
-            //try
-            //{
-            //    await turnContext.SendActivityAsync(activity);
-            //}
-            //catch (Exception ex)
-            //{
-
-            //    throw ex;
-            //}
-            //var action = Newtonsoft.Json.JsonConvert.DeserializeObject<ActionBase>(turnContext.Activity.Value.ToString());
-            //string strTurnContext = JsonConvert.SerializeObject(turnContext.Activity);
-            //var wellnessTracker = new WellnessTracker { Name = turnContext.Activity.From.Name, WellnessType = action.Type };
-            //StringContent httpContent = new StringContent(JsonConvert.SerializeObject(wellnessTracker));
-            //using (var client = new HttpClient())
-            //{
-            //    var response = await client.PostAsync(_config["WellnessTrackerUrl"], httpContent);
-            //    if (response.IsSuccessStatusCode)
-            //    {
-            //        await turnContext.SendActivityAsync($"{turnContext.Activity.From.Name} Your status is updated to {action.Type}");
-            //    }
-            //}
             
         }
     }

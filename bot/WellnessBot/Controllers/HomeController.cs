@@ -1,18 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using Microsoft.Bot.Connector;
 using Microsoft.Bot.Connector.Authentication;
-using Microsoft.Bot.Schema;
 using Microsoft.Extensions.Configuration;
-using AdaptiveCards;
 using System.Threading.Tasks;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using Newtonsoft.Json;
-using SidePanel.Models;
 using SidePanel.Model;
-using Microsoft.Extensions.Logging;
 
 namespace SidePanel.Controllers
 {

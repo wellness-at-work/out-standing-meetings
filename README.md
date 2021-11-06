@@ -1,5 +1,5 @@
-# Out-standing Meetings #
- A recent study indicates that prolonged sedentary time such as sitting contributes to increased risk of myriad of health related complications [[1]](#1). Out-standing meetings, a Microsoft Teams bot, helps individuals be non-sedentary during meetings by providing incentive to physically stand up. Working with Azure service offerings, the bot keeps track of the duration that meeting attendants are physically standing-up during meetings to create a ranking for most active *__outstanding__* meeting attendants.
+# Outstanding Meetings #
+We put together outstanding meetings after having discussions about how the standing piece of daily standup meetings is going away with virtual meetings. Outstanding meetings provides incentive for meeting attendants to stand up during meetings. A leader board of most *__outstanding__* meeting attendants together with daily status ranking provides a gamified approach to practicing healthy habits at work and reduce increased risk of health related complications [[1]](#1).
 
 > This project is created as part of [Microsoft US Hack for Wellness 2021](https://wellnesshack.devpost.com/)
 
@@ -10,7 +10,7 @@
 - Microsoft Teams Bot
 
 ## Architecture ##
-![Out-standing Architecture](readme/images/arch.png "Architecture")
+![outstanding Architecture](readme/images/arch.png "Architecture")
 
 ## Design Rationale ##
 On-demand data processing with Azure Function, coupled with web socket communication with SignalR provides the solution scalability it needs to support high volume of data. 
@@ -34,6 +34,7 @@ Future integration of sensors will make the solution more accessible by providin
 - Rupesh Kurvankattil 
 - Steve Jones
 - Tariku Tessema
+
 
 ## References
 <a id="1">[1]</a> 

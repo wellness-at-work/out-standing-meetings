@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31729.503
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FnOutstandingMeetings", "..\function\OutstandingMeetings\FnOutstandingMeetings.csproj", "{1FA2D13E-92AE-4886-A535-EFD029B2C45C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnOutstandingMeetings", "..\data\Entities\EnOutstandingMeetings.csproj", "{FB0341CE-6A5C-4651-8136-EEA0F71F4102}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1FA2D13E-92AE-4886-A535-EFD029B2C45C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FA2D13E-92AE-4886-A535-EFD029B2C45C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FA2D13E-92AE-4886-A535-EFD029B2C45C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FA2D13E-92AE-4886-A535-EFD029B2C45C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB0341CE-6A5C-4651-8136-EEA0F71F4102}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB0341CE-6A5C-4651-8136-EEA0F71F4102}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB0341CE-6A5C-4651-8136-EEA0F71F4102}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB0341CE-6A5C-4651-8136-EEA0F71F4102}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {041A5245-FB69-4E72-8D8F-1C535BCDCA37}
+	EndGlobalSection
+EndGlobal
