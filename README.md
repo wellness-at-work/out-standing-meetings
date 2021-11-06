@@ -1,5 +1,5 @@
 # Outstanding Meetings #
-We put together outstanding meetings after having discussions about how the standing piece of daily standup meetings is going away with virtual meetings. Outstanding meetings provides incentive for meeting attendants to stand up during meetings. A leader board of most *__outstanding__* meeting attendants together with daily status ranking provides a gamified approach to practicing healthy habits at work and reduce increased risk of health related complications [[1]](#1).
+We put together outstanding meetings after having discussions about how the standing piece of daily standup meetings is going away with virtual meetings. Outstanding meetings provides incentives for meeting attendants to stand up during meetings. A leader board of most _*outstanding*_ meeting attendants together with daily status ranking provides a gamified approach to practicing healthy habits at work and reducing the increased risk of health-related complications due to sedentary habits. [[1]](#1).
 
 > This project is created as part of [Microsoft US Hack for Wellness 2021](https://wellnesshack.devpost.com/)
 
@@ -19,7 +19,7 @@ On-demand data processing with Azure Function, coupled with web socket communica
 The solution supports displaying the ranking of most *__outstanding__* meeting attendants Microsoft Teams. Individual meeting participants will record the time they stood up/sat down during a Microsoft Teams meetings.
 
 ## Future Development ##
-Contact sensors attached to standing tables and wearable pedometer sensor will be integrated for the future state of the solution to gather more accurate health metrics such as time spent standing during virtual meetings and time it takes to walk to a physical meeting room.
+Contact sensors attached to standing tables and wearable pedometer sensor will be integrated for the future state of the solution to gather more accurate health metrics such as the time spent standing during virtual meetings and the time it takes to walk to a physical meeting room.
 
 ## Accessibility ##
 Future integration of sensors will make the solution more accessible by providing alternate ways to stay active during meetings for individuals with limited mobility.
